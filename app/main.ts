@@ -2,9 +2,10 @@ import * as net from 'net';
 
 const server = net.createServer(
   (socket) => {
+    console.log(socket);
     socket.on('data',(data)=>{
         const request = data.toString();
-        console.log(request);
+
         // const path = request.split(' ')[1];
         // const response = path === '/' ? 'HTTP/1.1 200 OK\r\n\r\n' : 'HTTP/1.1 404 Not Found\r\n\r\n';
         socket.write("200");
