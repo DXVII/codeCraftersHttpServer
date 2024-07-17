@@ -9,14 +9,26 @@ const responseFormat = (status: string,suffix:string) => {
 
 const server = createServer((socket: Socket) => {
     socket.on('data',(data:Buffer) => {
-      const path = data.toString().split(' ')[1];
+      const request = data.toString()
+      const path = request.split(' ')[1];
+
+
       if(path === "/"){
         socket.write(responseFormat("200 OK",""));
       }
+
       else if(path.includes("/echo/")){
         const suffix = path.split("/echo/")[1];
         socket.write(responseFormat("200 OK",suffix));
-      } else {
+        
+      } 
+      
+      else if(path.includes("/user-agent")){
+        const userAgentContent = (request.split("User-Agent: ")[1]).replace("\r\n\r\n","");
+        socket.write(responseFormat("200 OK",userAgentContent));
+      }
+      
+      else {
         socket.write(responseFormat("404 Not Found",""));
       }
       socket.end();
