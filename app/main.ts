@@ -1,16 +1,14 @@
-import * as net from 'net';
+import {Socket, createServer} from 'net';
+const responseFormat = (s: string) => `HTTP/1.1 ${s} \r\n\r\n`;
 
-const server = net.createServer(
-  (socket) => {
-    console.log(socket);
-    socket.on('data',(data)=>{
-        const request = data.toString();
-
-        // const path = request.split(' ')[1];
-        // const response = path === '/' ? 'HTTP/1.1 200 OK\r\n\r\n' : 'HTTP/1.1 404 Not Found\r\n\r\n';
-        socket.write("200");
-        socket.end();
-    })
+const server = createServer((socket: Socket) => {
+    socket.on('data',(data:Buffer) => {
+      const requestString = data.toString();
+      const url = new URL(requestString)
+      const pathname = url.pathname
+      socket.write((pathname =="/") ? responseFormat("200 OK"):responseFormat("404 Not Found"));
+      socket.end();
+  })
 });
 // You can use print statements as follows for debugging, they'll be visible when running tests.
 console.log("Logs from your program will appear here!");
