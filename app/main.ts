@@ -1,14 +1,22 @@
-import * as net from "net";
+import express from "express";
 
-// You can use print statements as follows for debugging, they'll be visible when running tests.
-console.log("Logs from your program will appear here!");
+const app = express()
 
-// Uncomment this to pass the first stage
-const server = net.createServer((socket) => {
-  socket.write("HTTP/1.1 200 OK\r\n\r\n")
-  socket.on("close", () => {
-    socket.end();
-  });
+app.get('/', (req, res) => {
+  res.status(200).send("OK")
 });
 
-server.listen(4221, "localhost");
+app.use(function(req, res, next) {
+  res.status(404).send('Not Found\r\n\r\n');
+});
+
+app.listen(4221,() => console.log("Listening on http://localhost:4221"));
+
+// import * as net from "net";
+// Uncomment this to pass the first stage
+// const server = net.createServer((socket) => {
+//   socket.write("HTTP/1.1 200 OK\r\n\r\n")
+//   socket.on("close", () => {
+//     socket.end();
+//   });
+// });
