@@ -1,14 +1,23 @@
 import {Socket, createServer} from 'net';
-const responseFormat = (status: string,suffix:string) => `HTTP/1.1 ${status}\r\n\r\n${suffix}`;
+
+const responseFormat = (status: string,suffix:string) => {
+  const statusStr = `HTTP/1.1 ${status}\r\n`
+  const contentType = `Content-Type: text/plain\r\n`
+  const contentLength = `Content-Length: ${suffix.length}\r\n`
+  return statusStr+contentType+contentLength+"\r\n"+suffix
+};
 
 const server = createServer((socket: Socket) => {
     socket.on('data',(data:Buffer) => {
       const path = data.toString().split(' ')[1];
-      if(path.includes("/echo/")){
+      if(path === "/"){
+        socket.write(responseFormat("200 OK",""));
+      }
+      else if(path.includes("/echo/")){
         const suffix = path.split("/echo/")[1];
         socket.write(responseFormat("200 OK",suffix));
       } else {
-        socket.write(responseFormat("404 NOT FOUND",""));
+        socket.write(responseFormat("404 Not Found",""));
       }
       socket.end();
   })
