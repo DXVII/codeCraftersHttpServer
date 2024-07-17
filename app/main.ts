@@ -1,5 +1,5 @@
 import {Socket, createServer} from 'net';
-const responseFormat = (s: string) => `HTTP/1.1 ${s} \r\n\r\n`;
+const responseFormat = (s: string) => `HTTP/1.1 ${s}\r\n\r\n`;
 
 const server = createServer((socket: Socket) => {
     socket.on('data',(data:Buffer) => {
