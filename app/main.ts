@@ -1,19 +1,22 @@
 import {Socket, createServer} from 'net';
-const responseFormat = (s: string) => `HTTP/1.1 ${s}\r\n\r\n`;
+const responseFormat = (status: string,suffix:string) => `HTTP/1.1 ${status}\r\n\r\n${suffix}`;
 
 const server = createServer((socket: Socket) => {
     socket.on('data',(data:Buffer) => {
       const path = data.toString().split(' ')[1];
-      socket.write((path =="/") ? responseFormat("200 OK"):responseFormat("404 Not Found"));
+      if(path.includes("/echo/")){
+        const suffix = path.split("/echo/")[1];
+        socket.write(responseFormat("200 OK",suffix));
+      } else {
+        socket.write(responseFormat("404 NOT FOUND",""));
+      }
       socket.end();
   })
 });
-// You can use print statements as follows for debugging, they'll be visible when running tests.
-console.log("Logs from your program will appear here!");
-// Uncomment this to pass the first stage
-server.listen(4221, 'localhost', () => {
-    console.log('Server is running on port 4221');
-});
+
+server.listen(4221, 'localhost', 
+  () => console.log('Server is running on port 4221')
+);
 
 
 // import express from "express";
