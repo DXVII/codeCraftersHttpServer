@@ -3,11 +3,8 @@ const responseFormat = (s: string) => `HTTP/1.1 ${s} \r\n\r\n`;
 
 const server = createServer((socket: Socket) => {
     socket.on('data',(data:Buffer) => {
-      const requestString = data.toString();
-      console.log(requestString);
-      const url = new URL(requestString)
-      const pathname = url.pathname
-      socket.write((pathname =="/") ? responseFormat("200 OK"):responseFormat("404 Not Found"));
+      const path = data.toString().split(' ')[1];
+      socket.write((path =="/") ? responseFormat("200 OK"):responseFormat("404 Not Found"));
       socket.end();
   })
 });
