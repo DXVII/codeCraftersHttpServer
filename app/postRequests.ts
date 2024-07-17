@@ -16,8 +16,8 @@ const postPathFiles = (socket:Socket,request:string) => {
      
      const path = request.split(' ')[1];
      const fileName = path.split("/files/")[1];
-     const requestLineSplit = request.split('\r\n');
-     const contentBody = requestLineSplit[requestLineSplit.length-1];
+     const requestSplitByRN = request.split('\r\n');
+     const contentBody = requestSplitByRN[requestSplitByRN.length-1];
 
      try {
           writeFileSync(dir+fileName,contentBody);
